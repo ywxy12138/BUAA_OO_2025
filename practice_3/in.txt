@@ -1,0 +1,7 @@
+1-Appetizer-Eat In
+2-Dessert-Take Away
+3-Appetizer-Take Away
+4-Appetizer-Eat In
+5-Main Course-Eat In
+6-Appetizer-Take Away
+7-Dessert-Eat In
