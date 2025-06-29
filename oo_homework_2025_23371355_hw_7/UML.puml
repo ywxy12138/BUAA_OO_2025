@@ -1,0 +1,243 @@
+@startuml
+class Strategy {
+- {static} boolean canTake(Person,SubTable,TransferArea)
+- {static} double cal(Person,SubTable,boolean,TransferArea)
++ {static} double minCom(double,SubTable)
++ {static} int fluPos(double,SubTable,int)
++ {static} int getBestId(HashMap<Integer,HashMap<String,SubTable>>,Person)
++ {static} Status getNextStatus(ArrayList<Person>,Elevator,boolean,TransferArea,String)
++ {static} boolean isReverse(ArrayList<Person>,int,boolean)
++ {static} void sortPriority(ArrayList<Person>)
++ {static} int getMinPriority(ArrayList<Person>)
++ {static} void cancelReceive(ArrayList<Person>)
++ {static} void receive(ArrayList<Person>)
+}
+
+class InputThread {
+- RequestTable requestTable
++ void run()
+}
+
+
+class DispatchThread {
+- RequestTable requests
++ void run()
+}
+
+
+class ElevatorThread {
+- SubTable subTable
++ void run()
+}
+
+
+class SubTable {
+- ArrayList<Person> people
+- boolean isEnd
+- Integer elevatorID
+- Elevator elevator
+- String side
+- long speed
+- boolean isUp
+- TransferArea transferArea
+- long lastTime
+- Status lastStatus
+- boolean isSchedule
+- boolean isUpdate
+- ScheRequest scheRequest
+- long lastScheduleTime
+- boolean isScheduleBegin
++ int getSize()
++ int getCurrentFloor()
++ TransferArea getArea()
++ String getSide()
++ int getEleId()
++ Status run()
++ void addPerson(Person)
++ void removePerson(Person)
++ ArrayList<Person> getPeople()
++ Boolean isUp()
++ void rob()
++ void moveAwayTranFloor()
+- void reverse()
++ void move()
+- void openAndClose()
++ void acceptSchedule(ScheRequest,long)
++ void schedule()
+- void scheduleBeginThenEnd()
++ void acceptUpdate(String)
++ void update()
+- void isCanTake(Person,int)
+- void transferSubToMain()
++ void finishSchedule()
++ void setEnd()
+- void setSpeed(long)
+- void setLastTime()
++ void setStatus(Status)
++ void setTransferArea(TransferArea)
++ boolean isEnd()
++ boolean isEmpty()
++ boolean isSchedule()
++ boolean isUpdate()
++ boolean isFull()
+}
+
+
+class Output {
++ {static} void printReceive(int,int)
++ {static} void printOutS(int,String,int)
++ {static} void printOutF(int,String,int)
++ {static} void printIn(int,String,int)
++ {static} void printArrive(String,int)
++ {static} void printOpen(String,int)
++ {static} void printClose(String,int)
++ {static} void printScheduleBegin(int)
++ {static} void printScheduleEnd(int)
++ {static} void printUpdateBegin(int,int)
++ {static} void printUpdateEnd(int,int)
+}
+
+class RequestTable {
+- {static} RequestTable requestTable
+- ArrayList<Person> people
+- boolean isEnd
+- ArrayList<Integer> waitingElevators
++ {static} RequestTable getInstance()
++ void addPerson(Person)
++ void addWaitingElevator(Integer)
++ void subWaitingElevator(Integer)
++ Person getPerson()
++ void setEnd()
++ boolean isEnd()
++ boolean isEmpty()
++ boolean isAllWaiting()
+}
+
+
+class ChangeFloor {
++ {static} int getFloor(String)
++ {static} String getFloor(int)
+}
+
+class TransferArea {
+- int transferFloor
+- String side
+- boolean beginA
+- boolean beginB
+- boolean realBegin
+- boolean endA
+- boolean endB
++ int getTraFlo()
++ void setTransferFloor(int)
++ void setBegin(String)
++ void setEnd(String)
++ void setRealBegin()
++ void setSide(String)
++ String getSide()
++ boolean getBegin()
++ boolean getRealBegin()
++ boolean getEnd()
+}
+
+
+class MainClass {
++ {static} void main(String[])
+}
+
+class TestMain {
++ {static} void main(String[])
+}
+
+class TestMain$TimableInputStream {
+- {static} Pattern pattern
+- Queue<Integer> cache
+- long initTime
+- Scanner scanner
++ int read()
++ int read(byte[],int,int)
+}
+
+
+class Person {
+- int currentFloor
+- int toFloor
+- int personId
+- int priority
+- int elevatorId
+- boolean isReceived
++ int getElevatorId()
++ boolean isReceived()
++ int getPriority()
++ int getPersonId()
++ boolean getIfArrived()
++ Person deepCopy()
++ boolean isUp()
++ boolean isHigher(int)
++ boolean toHigher(int)
++ boolean toLower(int)
++ int getDistance(int)
++ void setElevatorId(int)
++ void setIsReceived(boolean)
++ boolean isLower(int)
++ boolean canOpenForOut(int,String)
++ boolean canOpenForScheduleOut(boolean,int)
++ boolean canOpenForIn(int,boolean)
++ void move(boolean)
+}
+
+
+class AllElevators {
+- {static} AllElevators allElevators
+- HashMap<Integer,HashMap<String,SubTable>> elevators
+- int count
++ {static} AllElevators getInstance()
++ void addElevator(SubTable,Integer)
++ void acceptSchedule(ScheRequest,long)
++ void update(UpdateRequest)
++ void dispatch(Person)
++ void subDispatch(Person,SubTable,int)
++ void setEnd()
+}
+
+
+class Elevator {
+- int currentFloor
+- {static} int capacity
+- ArrayList<Person> inPeople
++ int getCurrentFloor()
++ int getSize()
++ void setCurrentFloor(int)
++ boolean isEmpty()
++ boolean canOpenForScheduleOut(boolean,int)
++ boolean canOpenForOut(int,String)
++ double out(double,boolean,int,boolean,boolean,boolean,int,String)
++ boolean canOpenForIn(ArrayList<Person>,boolean)
++ void in(SubTable,boolean,boolean,ArrayList<Person>,int,boolean)
++ void move(boolean)
++ boolean isFull()
+}
+
+
+enum Status {
++  MOVE
++  WAIT
++  OPEN
++  REVERSE
++  START
++  SCHEBEGIN
++  SCHEEND
++  OVER
++  RELEASE
++  ROB
++  UPDATEBegin
++  UPDATEEnd
+}
+
+
+
+Thread <|-- InputThread
+Thread <|-- DispatchThread
+Thread <|-- ElevatorThread
+TestMain +.. TestMain$TimableInputStream
+InputStream <|-- TestMain$TimableInputStream
+@enduml

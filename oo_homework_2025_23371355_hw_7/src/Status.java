@@ -1,0 +1,4 @@
+public enum Status {
+    MOVE, WAIT, OPEN, REVERSE, START, SCHEBEGIN, SCHEEND, OVER,
+    RELEASE, ROB, UPDATEBegin, UPDATEEnd
+}
