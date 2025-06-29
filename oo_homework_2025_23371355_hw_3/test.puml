@@ -1,0 +1,200 @@
+@startuml
+class Derive {
+- Expr expr
++ Factor deepCopy()
++ Factor replaceFun(Factor,Factor,String,String)
++ Poly toPoly()
+}
+
+
+class TriFun {
+- Factor factor
+- BigInteger exp
+- Token.Type type
++ Factor replaceFun(Factor,Factor,String,String)
++ Factor deepCopy()
++ Poly toPoly()
+}
+
+
+interface Factor {
+~ Factor deepCopy()
+~ Factor replaceFun(Factor,Factor,String,String)
+~ Poly toPoly()
+}
+
+class Term {
+- ArrayList<Factor> factors
+- Token.Type sign
++ void addFactor(Factor)
++ Term replaceFun(Factor,Factor,String,String)
++ Term deepCopy()
++ Poly toPoly()
++ void setSign(Token.Type)
+}
+
+
+class Definer {
+- {static} HashMap<String,ArrayList<String>> paraMap
+- {static} HashMap<String,Factor> norFunMap
+- {static} Const num1
+- {static} Const num2
+- {static} HashMap<Integer,Factor> funMap
+- {static} Expr funN11
+- {static} Expr funN12
+- {static} Expr funN21
+- {static} Expr funN22
+- {static} Expr funN
+- {static} Lexer lexer
+- {static} Scanner scan
++ {static} void build(Scanner,int,String)
++ {static} Factor callFunc(String,int,Factor,Factor)
++ {static} void addFun(Integer)
++ {static} void processVar(String)
++ {static} Expr processFun()
++ {static} void processN()
++ {static} void process(String)
++ {static} Expr buildExpr()
+}
+
+
+class Parser {
+- Lexer lexer
++ Token isToken()
++ Expr parseExpr()
++ Term parseTerm()
++ BigInteger getPow()
++ Expr parseExpFactor()
++ PowVar parsePowVar()
++ Const parseConst()
++ TriFun parseTriFun()
++ Factor parseRecFun()
++ Derive parseDerive()
++ Factor parseFactor()
+}
+
+
+class Token {
+- Type type
+- String value
++ Type getType()
++ String getValue()
+}
+
+
+enum Type {
++  ADD
++  SUB
++  MUL
++  POW
++  LPAREN
++  RPAREN
++  NUM
++  VAR
++  FUN
++  SIN
++  COS
++  END
++  DER
+}
+
+class MainClass {
++ {static} void main(String[])
+}
+
+class Lexer {
+- ArrayList<Token> tokens
+- int index
++ int getNum(String,int)
++ void reset()
++ Token getToke()
++ void nextToken()
++ boolean isEnd()
+}
+
+
+class Process {
++ {static} String process(String)
++ {static} String getOutMoreBlank(String)
++ {static} String getOutMoreSign(String)
+}
+
+class Expr {
+- ArrayList<Term> terms
+- BigInteger exp
++ void addTerm(Term,Token.Type)
++ Factor replaceFun(Factor,Factor,String,String)
++ void setExp(BigInteger)
++ Factor deepCopy()
++ Poly toPoly()
+}
+
+
+class PowVar {
+- BigInteger exp
+- String type
++ Factor deepCopy()
++ Factor replaceFun(Factor,Factor,String,String)
++ Poly toPoly()
+}
+
+
+class Unit {
+- BigInteger coe
+- BigInteger exp
+- HashMap<Poly,BigInteger> sinHashMap
+- HashMap<Poly,BigInteger> cosHashMap
+- BigInteger minus
+- BigInteger one
+- BigInteger zero
++ int coeComToZero()
++ Poly derive()
++ Unit deepCopy()
++ Unit mergeUnit(Unit,int)
++ boolean isSinFact()
++ void simplifySinMap()
++ void simplifyCosMap()
++ HashMap<Poly,BigInteger> simplifyMap(HashMap<Poly,BigInteger>,Token.Type)
++ void simplifyUnit()
++ Unit add(Unit)
++ Unit mul(Unit)
++ String mapToString(String,HashMap<Poly,BigInteger>,Token.Type)
++ String buildString()
++ HashMap<Poly,BigInteger> mulMap(HashMap<Poly,BigInteger>,HashMap<Poly,BigInteger>)
++ int judge(HashMap<Poly,BigInteger>,HashMap<Poly,BigInteger>,int)
++ int myEquals(Unit,int)
++ void setSign(Token.Type)
+}
+
+
+class Poly {
+- ArrayList<Unit> units
++ ArrayList<Unit> getPolyList()
++ Poly derive()
++ void addPoly(Poly)
++ void addUnit(Unit)
++ void mulPoly(Poly)
++ String buildString(int)
++ void setSign(Token.Type)
++ Poly deepCopy()
++ boolean isAllZero()
++ int myEquals(Poly,int)
+}
+
+
+class Const {
+- BigInteger coe
++ Factor deepCopy()
++ Factor replaceFun(Factor,Factor,String,String)
++ Poly toPoly()
+}
+
+
+
+
+Factor <|.. Derive
+Factor <|.. TriFun
+Factor <|.. Expr
+Factor <|.. PowVar
+Factor <|.. Const
+@enduml
