@@ -1,0 +1,94 @@
+@startuml
+class Token {
+- Type type
+- String value
++ Type getType()
++ String getValue()
+}
+
+
+enum Type {
++  ADD
++  SUB
++  MUL
++  POW
++  LPAREN
++  RPAREN
++  BLANK
++  NUM
++  VAR
+}
+
+class Const {
+- HashMap<Integer,BigInteger> nums
++ HashMap<Integer,BigInteger> getFactor()
+}
+
+
+class Var {
+- HashMap<Integer,BigInteger> vars
++ HashMap<Integer,BigInteger> getFactor()
+}
+
+
+class Parser {
+- Lexer lexer
++ void omitBlank()
++ Token isToken()
++ int subExpPow(HashMap<Integer,BigInteger>,Token,Term)
++ Expr parseExpr()
++ Term parseTerm()
++ Factor parseFactor()
+}
+
+
+class Term {
+- HashMap<Integer,BigInteger> factors
++ void addFactor(HashMap<Integer,BigInteger>)
++ void setFactors(Token)
++ HashMap<Integer,BigInteger> getFactors()
+}
+
+
+class Lexer {
+- ArrayList<Token> tokens
+- int index
++ Token getToke()
++ void nextToken()
++ boolean isEnd()
+}
+
+
+interface Factor {
+~ HashMap<Integer,BigInteger> getFactor()
+}
+
+class Expr {
+- HashMap<Integer,BigInteger> terms
++ void addTerm(HashMap<Integer,BigInteger>,Token)
++ Integer printLg(HashMap.Entry<Integer,BigInteger>)
++ void print(HashMap<Integer,BigInteger>)
++ HashMap<Integer,BigInteger> getFactor()
+}
+
+
+class MainClass {
++ {static} void main(String[])
+}
+
+Expr <.. Term
+
+Term <.. Factor
+
+Factor <|.. Const
+Factor <|.. Var
+Factor <|.. Expr
+
+Parser o.. Lexer
+Lexer o.. Token
+Token o.. Type
+
+Parser <.. Expr
+Parser <.. Term
+Parser <.. Factor
+@enduml
