@@ -1,0 +1,19 @@
+scheduled-1-to-A
+InputThread ends
+scheduled-2-to-C
+working-1-by-A
+working-2-by-C
+scheduled-3-to-A
+scheduled-4-to-A
+scheduled-5-to-B
+scheduled-6-to-A
+scheduled-7-to-C
+DispatchThread ends
+working-5-by-B
+working-4-by-A
+working-7-by-C
+ChefThread B ends
+working-3-by-A
+ChefThread C ends
+working-6-by-A
+ChefThread A ends
