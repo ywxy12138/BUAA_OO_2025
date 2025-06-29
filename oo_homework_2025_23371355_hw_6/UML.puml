@@ -1,0 +1,210 @@
+@startuml
+class InputThread {
+- RequestTable requestTable
++ void run()
+}
+
+
+class AllElevators {
+- {static} AllElevators allElevators
+- HashMap<Integer,ProcessingTable> elevators
++ {static} AllElevators getInstance()
++ void addElevator(ProcessingTable,Integer)
++ void acceptSchedule(ScheRequest,long)
++ void dispatch(Person)
++ void setEnd()
+}
+
+
+class Elevator {
+- int currentFloor
+- {static} int capacity
+- ArrayList<Person> inPeople
++ int getCurrentFloor()
++ boolean isEmpty()
++ boolean canOpenForScheduleOut(boolean,int)
++ boolean canOpenForOut()
++ double out(double,boolean,int,boolean,boolean,boolean)
++ boolean canOpenForIn(ArrayList<Person>,boolean)
++ void in(ProcessingTable,boolean,boolean,ArrayList<Person>,int,boolean)
++ void move(boolean)
++ Elevator deepCopy()
+}
+
+
+enum Status {
++  MOVE
++  WAIT
++  OPEN
++  REVERSE
++  START
++  SCHEBEGIN
++  SCHEEND
++  OVER
+}
+
+class MainClass {
++ {static} void main(String[])
+}
+
+class DispatchThread {
+- RequestTable requests
++ void run()
+}
+
+
+class Person {
+- int currentFloor
+- int toFloor
+- int personId
+- int priority
+- int elevatorId
+- boolean isReceived
++ int getElevatorId()
++ boolean isReceived()
++ int getPriority()
++ int getPersonId()
++ Person deepCopy()
++ boolean isUp()
++ boolean isHigher(int)
++ void setElevatorId(int)
++ void setIsReceived(boolean)
++ boolean isLower(int)
++ boolean canOpenForOut()
++ boolean canOpenForScheduleOut(boolean,int)
++ boolean canOpenForIn(int,boolean)
++ void move(boolean)
+}
+
+
+class ProcessingTable {
+- ArrayList<Person> people
+- boolean isEnd
+- Integer elevatorID
+- Elevator elevator
+- long speed
+- boolean isUp
+- long lastTime
+- Status lastStatus
+- boolean isSchedule
+- ScheRequest scheRequest
+- long lastScheduleTime
+- int scale
++ long getSpeed()
++ long getLastScheduleTime()
++ int getScale()
++ long getLastTime()
++ ScheRequest getScheRequest()
++ Status getLastStatus()
++ Status run()
++ void addPerson(Person)
++ void removePerson(Person)
++ ArrayList<Person> deepCopyPeople()
++ ArrayList<Person> getPeople()
++ Elevator getElevator()
++ Boolean isUp()
++ int getTotalPriority()
+- void reverse()
+- void move()
+- void openAndClose()
++ void acceptSchedule(ScheRequest,long)
++ void schedule()
+- void scheduleBeginThenEnd()
+- void transferSubToMain()
++ void finishSchedule()
++ void setEnd()
+- void setSpeed(long)
+- void setLastTime()
+- void setStatus(Status)
++ boolean isEnd()
++ boolean isEmpty()
++ boolean isSchedule()
+}
+
+
+class VirtualElevator {
+- double virtualTime
+- Elevator elevator
+- ArrayList<Person> people
+- boolean isUp
+- int totalPriority
+- double averageTime
+- long speed
+- long lastTime
+- Status lastStatus
+- boolean isSchedule
+- ScheRequest scheRequest
+- long lastScheduleTime
+- int scale
++ double getTime()
+- void reverse()
++ void addPerson(Person)
++ void run()
+- void schedule()
++ boolean isEmpty()
+- void openAndClose()
+- void move()
+}
+
+
+class ChangeFloor {
++ {static} int getFloor(String)
++ {static} String getFloor(int)
+}
+
+class ElevatorThread {
+- ProcessingTable processingTable
++ void run()
+}
+
+
+class TestMain {
++ {static} void main(String[])
+}
+
+class TestMain$TimableInputStream {
+- {static} Pattern pattern
+- Queue<Integer> cache
+- long initTime
+- Scanner scanner
++ int read()
++ int read(byte[],int,int)
+}
+
+
+class Strategy {
++ {static} boolean initIsUp(ProcessingTable,Elevator)
++ {static} int getBestId(HashMap<Integer,ProcessingTable>,Person)
++ {static} Status getNextStatus(ArrayList<Person>,Elevator,boolean)
++ {static} boolean isReverse(ArrayList<Person>,int,boolean)
++ {static} void sortPriority(ArrayList<Person>)
++ {static} int getMinPriority(ArrayList<Person>)
++ {static} void cancelReceive(ArrayList<Person>)
++ {static} void receive(ArrayList<Person>)
+}
+
+class RequestTable {
+- {static} RequestTable requestTable
+- ArrayList<Person> people
+- boolean isEnd
+- ArrayList<Integer> waitingElevators
++ {static} RequestTable getInstance()
++ void addPerson(Person)
++ void addWaitingElevator(Integer)
++ void subWaitingElevator(Integer)
++ Person getPerson()
++ void setEnd()
++ boolean isEnd()
++ boolean isEmpty()
++ boolean isAllWaiting()
+}
+
+
+
+
+Thread <|-- InputThread
+Thread <|-- DispatchThread
+Thread <|-- ElevatorThread
+TestMain +.. TestMain$TimableInputStream
+InputStream <|-- TestMain$TimableInputStream
+@enduml
