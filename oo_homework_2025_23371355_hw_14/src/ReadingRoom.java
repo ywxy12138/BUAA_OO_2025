@@ -1,0 +1,41 @@
+import com.oocourse.library2.LibraryBookId;
+import com.oocourse.library2.LibraryMoveInfo;
+import com.oocourse.library2.LibraryTrace;
+import com.oocourse.library2.LibraryBookState;
+import com.oocourse.library2.annotation.Trigger;
+
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashMap;
+
+public class ReadingRoom {
+    private HashMap<LibraryBookId, Book> books;
+
+    public ReadingRoom() {
+        books = new HashMap<>();
+    }
+
+    public void handle4Read(Book book) {
+        books.put(book.getId(), book);
+    }
+
+    public Book handle4Restored(LibraryBookId id) {
+        return books.remove(id);
+    }
+
+    @Trigger(from = "onRr", to = "onBs")
+    public ArrayList<LibraryMoveInfo> arrange4Return(LocalDate nowDate) {
+        ArrayList<LibraryMoveInfo> infos = new ArrayList<>();
+        Bookshelf bookshelf = Bookshelf.getInstance();
+        for (LibraryBookId id : books.keySet()) {
+            Book book = books.get(id);
+            bookshelf.addBook(book);
+            infos.add(new LibraryMoveInfo(id,
+                LibraryBookState.READING_ROOM, LibraryBookState.BOOKSHELF));
+            book.addPath(new LibraryTrace(nowDate,
+                LibraryBookState.READING_ROOM, LibraryBookState.BOOKSHELF));
+        }
+        books.clear();
+        return infos;
+    }
+}
