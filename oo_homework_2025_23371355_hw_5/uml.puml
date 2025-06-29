@@ -1,0 +1,144 @@
+ @startuml
+class VirtualElevatorThread {
+- double virtualTime
+- Elevator elevator
+- CopyOnWriteArrayList<Person> people
+- boolean isUp
+- int totalPriority
+- double averageTime
+- double electricUsage
++ double getTime()
++ double getElectricUsage()
++ void setPeople(CopyOnWriteArrayList<Person>)
++ void setTotalPriority(int)
++ void run()
+- void openAndClose()
+- void move()
+}
+
+
+class Strategy {
++ {static} boolean initIsUp(RequestTable)
++ {static} Status getNextStatus(CopyOnWriteArrayList<Person>,Elevator,boolean)
++ {static} boolean isReverse(CopyOnWriteArrayList<Person>,int,boolean)
++ {static} void sortPriority(CopyOnWriteArrayList<Person>)
++ {static} int getMinPriority(CopyOnWriteArrayList<Person>)
+}
+
+class MainClass {
++ {static} void main(String[])
+}
+
+class Person {
+- int currentFloor
+- int toFloor
+- int personId
+- int priority
+- int elevatorId
+- Long startTime
++ int getElevatorId()
++ int getPriority()
++ int getPersonId()
++ long getStartTime()
++ Person deepCopy()
++ boolean isUp()
++ boolean isHigher(int)
++ boolean isLower(int)
++ boolean canOpenForOut()
++ boolean canOpenForIn(int,boolean)
++ void move(boolean)
+}
+
+
+enum Status {
++  MOVE
++  WAIT
++  OPEN
++  REVERSE
++  START
+}
+
+class TestMain {
++ {static} void main(String[])
+}
+
+class TestMain$TimableInputStream {
+- {static} Pattern pattern
+- Queue<Integer> cache
+- long initTime
+- Scanner scanner
++ int read()
++ int read(byte[],int,int)
+}
+
+
+class ElevatorThread {
+- Integer elevatorID
+- RequestTable processingTable
+- Elevator elevator
+- boolean isUp
+- long lastTime
+- Status lastStatus
++ void run()
+- void move()
+- void openAndClose()
+}
+
+
+class DispatchThread {
+- RequestTable requests
+- ConcurrentHashMap<Integer,RequestTable> requestMap
++ void run()
+- void dispatch(Person)
+}
+
+
+class RequestTable {
+- CopyOnWriteArrayList<Person> people
+- boolean isEnd
++ void addRequest(Person)
++ Person getRequests()
++ void removeRequest(Person)
++ CopyOnWriteArrayList<Person> getPeople()
++ CopyOnWriteArrayList<Person> deepCopy()
++ void setEnd()
++ boolean isEnd()
++ boolean isEmpty()
+}
+
+
+class InputThread {
+- RequestTable requestTable
++ void run()
+}
+
+
+class Elevator {
+- int currentFloor
+- {static} int capacity
+- {static} int velocity
+- CopyOnWriteArrayList<Person> inPeople
++ int getCurrentFloor()
++ boolean isEmpty()
++ boolean canOpenForOut()
++ void out()
++ double out(double)
++ boolean canOpenForIn(CopyOnWriteArrayList<Person>,boolean)
++ void in(RequestTable,boolean,boolean,CopyOnWriteArrayList<Person>)
++ void move(boolean)
+}
+
+
+class ChangeFloor {
++ {static} int getFloor(String)
++ {static} String getFloor(int)
+}
+
+
+
+TestMain +.. TestMain$TimableInputStream
+InputStream <|-- TestMain$TimableInputStream
+Thread <|-- ElevatorThread
+Thread <|-- DispatchThread
+Thread <|-- InputThread
+@enduml
