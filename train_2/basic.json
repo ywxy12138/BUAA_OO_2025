@@ -1,0 +1,4 @@
+{
+  "1": "complete (8): extends Thread; complete (9): new Thread(process2).start();",
+  "3": "C"
+}
